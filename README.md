@@ -1,59 +1,61 @@
-# Angular Demo App
+# CatGallery — Angular Test App
 
-Projeto de demonstração Angular com 3 páginas, routing, componentes reutilizáveis e integração com API REST.
+Aplicação Angular que consome a **The Cat API** para mostrar uma galeria de gatos com filtro por raça, utilizando componentes standalone e a sintaxe moderna de control flow (`@if`, `@for`).
 
 ## Funcionalidades
 
-- **3 Páginas**: Home, Utilizadores e Sobre
-- **Routing**: Navegação com `RouterLink`, `RouterLinkActive` e wildcard redirect
-- **Navbar**: Fixa no topo com menu mobile responsivo
-- **Footer**: Com links de navegação e créditos
-- **Chamadas API**: Integração com [JSONPlaceholder](https://jsonplaceholder.typicode.com) via `HttpClient`
-- **Standalone Components**: Sem NgModules — abordagem moderna Angular 18+
-- **TypeScript Interfaces**: Modelos `User` e `Post` com tipagem forte
-- **Control Flow**: Nova sintaxe `@if`, `@for`, `@else` do Angular 17+
+- **3 páginas**: Home, Gatos e Sobre
+- **Home**: hero com call‑to‑action e cartão de gato em destaque, com refresh de imagem
+- **Página Gatos**: seleção de raça, carregamento de imagem e detalhes da raça (origem, descrição, temperamento, esperança de vida)
+- **Página Sobre**: explicação da arquitetura, tecnologias e endpoints usados
+- **Navbar fixa**: com menu responsivo (desktop/mobile)
+- **Footer**: com navegação rápida e créditos
+- **Integração com API externa**: consumo da [The Cat API](https://thecatapi.com/) via `HttpClient`
+- **Standalone Components**: app sem NgModules, usando componentes standalone (Angular 18+)
 
 ## Estrutura do Projeto
 
-```
+```text
 src/
 ├── app/
-│   ├── components/         # Componentes reutilizáveis
-│   │   ├── navbar/         # Barra de navegação
-│   │   └── footer/         # Rodapé
-│   ├── pages/              # Páginas da aplicação
-│   │   ├── home/           # Homepage com posts recentes
-│   │   ├── users/          # Lista de utilizadores (API)
-│   │   └── about/          # Documentação do projeto
-│   ├── services/           # Serviços (lógica de dados)
-│   │   └── user.service.ts # Chamadas HTTP à API
-│   ├── models/             # Interfaces TypeScript
-│   │   └── user.model.ts   # User e Post
-│   ├── app.component.ts    # Componente raiz
-│   ├── app.config.ts       # Configuração (providers)
-│   └── app.routes.ts       # Definição de rotas
-├── environments/           # Configuração por ambiente
-├── styles.css              # Estilos globais
-├── index.html              # HTML de entrada
-└── main.ts                 # Bootstrap da aplicação
+│   ├── components/
+│   │   ├── navbar/
+│   │   └── footer/
+│   ├── pages/
+│   │   ├── home/
+│   │   ├── cats/
+│   │   └── about/
+│   ├── services/
+│   │   └── cat.service.ts
+│   ├── models/
+│   │   └── cat.model.ts
+│   ├── app.component.ts
+│   ├── app.config.ts
+│   └── app.routes.ts
+├── styles.css
+├── index.html
+└── main.ts
 ```
 
-## Endpoints API Utilizados
+## API — The Cat API
 
-| Método | Endpoint                       | Descrição                          |
-|--------|--------------------------------|------------------------------------|
-| GET    | `/users`                       | Lista de todos os utilizadores     |
-| GET    | `/users/{id}`                  | Detalhes de um utilizador          |
-| GET    | `/posts?userId={id}`           | Posts de um utilizador específico   |
-| GET    | `/posts?_limit=6`              | Primeiros 6 posts (homepage)       |
+Principais endpoints utilizados pelo `CatService`:
 
-## Como Executar
+| Método | Endpoint / Exemplo                                     | Descrição                                                                 |
+|--------|--------------------------------------------------------|---------------------------------------------------------------------------|
+| GET    | `/images/search?limit=6&has_breeds=1`                  | Lista imagens de gatos com informação de raça (preview na Home)          |
+| GET    | `/images/search?limit=1&has_breeds=1&breed_ids={id}`   | Busca imagem de gato filtrada por raça selecionada na página de Gatos    |
+| GET    | `/breeds`                                             | Lista todas as raças com nome, descrição, temperamento, origem, life span |
+
+## Como Executar Localmente
 
 ```bash
 # 1. Instalar dependências
 npm install
 
 # 2. Iniciar servidor de desenvolvimento
+npm start
+# ou
 ng serve
 
 # 3. Abrir no browser
@@ -62,18 +64,18 @@ ng serve
 
 ## Tecnologias
 
-- Angular 18
-- TypeScript 5.5
-- RxJS 7.8
-- CSS3 (variáveis custom, grid, flexbox, animações)
+- **Angular 18** (`@angular/* 18.x`)
+- **TypeScript 5.5**
+- **RxJS 7.8**
+- **HttpClient** para chamadas HTTP
+- **CSS3** com variáveis custom, grid, flexbox e animações
 
 ## Conceitos Demonstrados
 
-1. **Standalone Components** — Cada componente declara as suas dependências
-2. **Routing** — `provideRouter()`, `RouterLink`, `RouterLinkActive`
-3. **Serviços com DI** — `UserService` injetado via `providedIn: 'root'`
-4. **HttpClient** — Chamadas GET com Observables e tratamento de erros
-5. **Interfaces TypeScript** — Type safety nos dados da API
-6. **Control Flow** — `@if`, `@for` em vez de `*ngIf`, `*ngFor`
-7. **Componentes reutilizáveis** — Navbar e Footer partilhados entre páginas
-8. **Design responsivo** — Layout adaptável a mobile e desktop
+1. **Standalone Components** — `HomeComponent`, `CatsComponent`, `AboutComponent`, `NavbarComponent`, `FooterComponent`
+2. **Routing** — `app.routes.ts` com navegação entre Home, Gatos e Sobre
+3. **Serviço com DI** — `CatService` injetado via `providedIn: 'root'`
+4. **HttpClient + Observables** — consumo da The Cat API com tratamento de loading, erro e cache simples no preview
+5. **Interfaces TypeScript** — `CatImage` e `CatBreed` para tipar respostas da API
+6. **Control Flow Angular 17+** — uso de `@if` e `@for` em vez de `*ngIf`/`*ngFor`
+7. **Design responsivo** — layout adaptável com navbar fixa e componentes estilizados em `styles.css`
